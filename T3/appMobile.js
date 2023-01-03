@@ -24,7 +24,6 @@ import {
 } from "./utils/utils.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { AmbientLight, SpotLight, Vector3 } from "../build/three.module.js";
-//import { OrbitControls } from '../build/jsm/controls/OrbitControls.js';
 //import nipplejs from 'nipplejs';
 
 const slerpConfig = {
@@ -885,15 +884,6 @@ Object.keys(keys).forEach((objKey) => {
 //insertCubes(cubeMaterial, collidableCubes, collidableMeshList, scene);
 
 // insertCubes(cubeMaterial, collidableCubes, scene);
-
-//var controls = new OrbitControls(camera, renderer.domElement);
-
-/* controls.keys = {
-  LEFT: 'ArrowLeft', //left arrow
-  UP: 'ArrowUp', // up arrow
-  RIGHT: 'ArrowRight', // right arrow
-  BOTTOM: 'ArrowDown' // down arrow
-} */
 
 
 let scale = 1;
