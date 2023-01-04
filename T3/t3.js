@@ -973,68 +973,6 @@ Object.keys(keys).forEach((objKey) => {
 
 // insertCubes(cubeMaterial, collidableCubes, scene);
 
-
-let scale = 1;
-let previousScale = 0;
-let size = 5;
-let up = 0;
-let down = 0;
-let right = 0;
-let left = 0;
-let tempVector = new THREE.Vector3();
-let upVector = new THREE.Vector3(0, 1, 0);
-var joystickMoviment = false;
-
-
-
-function addJoystick() {
-
-  // Details in the link bellow:
-  // https://yoannmoi.net/nipplejs/
-
-  let joystickL = nipplejs.create({
-    zone: document.getElementById('joystickWrapper1'),
-    mode: 'static',
-    position: { top: '-80px', left: '80px' }
-  });
-
-  joystickL.on('move', function (evt, data) {
-    const forward = data.vector.y
-    const turn = data.vector.x
-    up = down = left = right = 0;
-    joystickMoviment = true;
-
-    console.log("Valor turn: ", turn)
-    console.log("Valor forward: ", forward) 
-
-    if (Math.abs(forward) >= Math.abs(turn)) {
-      if (forward > 0)
-        up = Math.abs(forward)
-      else if (forward < 0)
-        down = Math.abs(forward)
-    }
-    else {
-      if (turn > 0)
-        right = Math.abs(turn)
-      else if (turn < 0)
-        left = Math.abs(turn)
-    }
-  
-  })
-
-  joystickL.on('end', function (evt) {
-    down = 0
-    up = 0
-    left = 0
-    right = 0
-    joystickMoviment = false;
-  })
-
-}
-
-addJoystick();
-
-
 render();
 
 // Funções auxiliares
@@ -1514,40 +1452,8 @@ function lerps() {
 
 // Listener para o evento de click do mouse
 document.addEventListener("mousedown", checkObjectClicked, false);
-function updatePlayer() {
-
-
-  if (up > 0) {
-    new_direction = 135;
-    checkMovement("x", -diagonalDistance);
-    checkMovement("z", -diagonalDistance);
-
-  }
-
-   else if (down > 0) {
-    new_direction = 315;
-    checkMovement("x", diagonalDistance);
-    checkMovement("z", diagonalDistance);
-  }
-
-  else if (right > 0) {
-    console.log('Entrei aqui')
-    new_direction = 45;
-    checkMovement("x", diagonalDistance);
-    checkMovement("z", -diagonalDistance);
-  }
-
-  else if (left > 0) {
-    new_direction = 225;
-    checkMovement("x", -diagonalDistance);
-    checkMovement("z", diagonalDistance);
-
-  }
-
-}
 
 function render() {
-  updatePlayer();
   var delta = clock.getDelta(); // Get the seconds passed since the time 'oldTime' was set and sets 'oldTime' to the current time.
   checkDistanceBetweenManAndDoors();
   checkDistanceBetweenManAndInterruptors();
@@ -1574,7 +1480,7 @@ function render() {
 
   keyboardUpdate();
 
-  if (keyboardOn(keyboard) || joystickMoviment == true) {
+  if (keyboardOn(keyboard)) {
     for (var i = 0; i < mixer.length; i++) mixer[i].update(delta * 2);
   }
 }

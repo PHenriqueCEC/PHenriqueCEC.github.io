@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <title>mobile</title>
-  <link rel="shortcut icon" href="../favicon.ico" />
+  <head>
+    <title>t3</title>
+    <link rel="shortcut icon" href="../favicon.ico" />
     <link rel="stylesheet" href="../html/resources/default.css" />
     <link rel="stylesheet" href="./t3.css" />
     <link rel="stylesheet" href="./loadingScreen.css" />
@@ -17,49 +16,35 @@
       nomodule
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"
     ></script>
-  <script>
-    window.onload = function() {
-      var context = new AudioContext();
-    }
+    <script>
+      window.onload = function () {
+        var context = new AudioContext();
+      };
     </script>
+  </head>
 
-<style>  
-  #joystickWrapper1 {
-    pointer-events: auto;
-    position: absolute;       
-    bottom: 0;
-    left: 0;
-    display: block; 
-    touch-action: manipulation;
-  }
-
-</style>
-</head>
-
-<body>
-  <section id="loading-screen">
-    <span class="spinner"></span>
-    <div class="progress-bar">
-      <div class="progress-bar-fill"></div>
-      <div class="progress-bar-text">0%</div>
-    </div>
-    <button class="button">Start</button>
-  </section>
-  <!-- Import maps polyfill -- Remove this when import maps will be widely supported-->
-  <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
-  <script type="importmap">
+  <body>
+    <!-- Import maps polyfill -- Remove this when import maps will be widely supported-->
+    <section id="loading-screen">
+      <span class="spinner"></span>
+      <div class="progress-bar">
+        <div class="progress-bar-fill"></div>
+        <div class="progress-bar-text">0%</div>
+      </div>
+      <button class="button">Start</button>
+    </section>
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"
+    ></script>
+    <script type="importmap">
       { "imports": { "three": "../build/three.module.js" } }
     </script>
 
-    
-  <div id="joystickWrapper1"></div>
-  <script src="../libs/other/nipplejs.js"></script>     
-
-  <div id="webgl-output">
-    <script type="module" src="appMobile.js"></script>
-  </div>
-
-  <model-viewer
+    <div id="webgl-output">
+      <script type="module" src="t3.js"></script>
+    </div>
+    <model-viewer
       id="blue-key"
       src="./assets/keys/blueKey.gltf"
       alt="Key"
@@ -86,6 +71,5 @@
     <p id="blue-key-quantity">x0</p>
     <p id="red-key-quantity">x0</p>
     <p id="yellow-key-quantity">x0</p>
-</body>
-
+  </body>
 </html>
