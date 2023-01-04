@@ -973,19 +973,11 @@ Object.keys(keys).forEach((objKey) => {
 
 // insertCubes(cubeMaterial, collidableCubes, scene);
 
-
-let scale = 1;
-let previousScale = 0;
-let size = 5;
 let up = 0;
 let down = 0;
 let right = 0;
 let left = 0;
-let tempVector = new THREE.Vector3();
-let upVector = new THREE.Vector3(0, 1, 0);
 var joystickMoviment = false;
-
-
 
 function addJoystick() {
 
