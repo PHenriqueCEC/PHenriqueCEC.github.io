@@ -21,6 +21,7 @@ import {
   insertCubesThirdArea,
   positionSpotlightsThirdArea,
   collectKey,
+  positionCubesThirdArea,
 } from "./utils/utils.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { AmbientLight, SpotLight, Vector3 } from "../build/three.module.js";
@@ -478,10 +479,17 @@ const checkDistanceBetweenManAndInterruptors = () => {
     }
   });
 };
+let sk = tiles / 2;
+let planeGeometryK = new THREE.PlaneGeometry(sk, sk, 1, 1);
+planeGeometryK.rotateX(-Math.PI / 2);
+
 //Cria primeira area
 let planeMaterial1 = new THREE.MeshLambertMaterial();
 
 let planA1 = new THREE.Mesh(planeGeometry, planeMaterial1);
+tex = textureLoader.load(
+  "./assets/textures/istockphoto-1182146265-612x612.jpg"
+);
 tex = textureLoader.load(
   "./assets/textures/istockphoto-1182146265-612x612.jpg"
 );
@@ -504,6 +512,9 @@ for (let x = -tiles; x <= tiles - 1; x += 1) {
       const borderCube = new THREE.Mesh(cubeGeometry, clonedMaterial);
       borderCube.position.set(x + 0.5, -3.5, z);
       borderCube.translateX(49);
+      borderCube.material.map = textureLoader.load(
+        "./assets/textures/360_F_362952640_nPNPT14Jf1VtZLuJBT7snEK2OBgrmwhQ.jpg"
+      );
       borderCube.material.map = textureLoader.load(
         "./assets/textures/360_F_362952640_nPNPT14Jf1VtZLuJBT7snEK2OBgrmwhQ.jpg"
       );
@@ -545,7 +556,7 @@ for (let i = 0; i < 3; i++) {
 for (let i = -1.5; i < 3; i += 2) {
   const clonedMaterial = cubeMaterial.clone();
   const borderCube = new THREE.Mesh(cubeGeometry, clonedMaterial);
-  borderCube.position.set(x + i, -3.5, z - 3);
+  borderCube.position.set(x + i, -4.5, z - 3);
   // borderCubeBB
   borderCube.material.map = textureLoader.load(
     "./assets/textures/360_F_362952640_nPNPT14Jf1VtZLuJBT7snEK2OBgrmwhQ.jpg"
@@ -557,7 +568,7 @@ for (let i = -1.5; i < 3; i += 2) {
   scene.add(borderCube);
 
   const borderCube2 = new THREE.Mesh(cubeGeometry, clonedMaterial);
-  borderCube2.position.set(x + i, -3.5, z + 4);
+  borderCube2.position.set(x + i, -4.5, z + 4);
   borderCube2.castShadow = true;
   borderCube2.receiveShadow = true;
   const borderCubeBB2 = new THREE.Box3().setFromObject(borderCube2);
@@ -568,27 +579,33 @@ for (let i = -1.5; i < 3; i += 2) {
 }
 
 //Chave azul
-let roomKey = tiles / 4;
+let planKeyAMaterial = new THREE.MeshLambertMaterial();
+let planKeyA = new THREE.Mesh(planeGeometryK, planKeyAMaterial);
+planKeyA.material.map = textureLoader.load(
+  "./assets/textures/istockphoto-1182146265-612x612.jpg"
+);
+planKeyA.receiveShadow = true;
+planKeyA.material.map.wrapS = THREE.RepeatWrapping;
+planKeyA.material.map.wrapT = THREE.RepeatWrapping;
+planKeyA.material.map.minFilter = THREE.LinearFilter;
+planKeyA.material.map.magFilter = THREE.NearestFilter;
+planKeyA.material.map.repeat.set(2.5, 2.5);
+planKeyA.position.set(79, -4.6, 0);
+scene.add(planKeyA);
+
+let roomKey = tiles / 4 - 0.25;
 for (let x = -roomKey; x <= roomKey; x += 1) {
   for (let z = -roomKey; z <= roomKey; z += 1) {
-    let floorCube = new THREE.Mesh(floorCubeGeometry, materialFloorCube);
-    let auxFloorCube = new THREE.Mesh(
-      auxFloorCubeGeometry,
-      materialAuxFloorCube
-    );
-    floorCube.position.set(x, -5.0, z);
-    floorCube.translateX(79);
-    floorCube.receiveShadow = true;
-    auxFloorCube.receiveShadow = true;
-    scene.add(floorCube);
-    floorCube.add(auxFloorCube);
-    auxFloorCube.translateY(0.01);
     if (Math.abs(z) === roomKey || Math.abs(x) === roomKey) {
-      if (Math.abs(z) >= 0 && Math.abs(z) <= 4 && x <= 0 && z >= -2) continue;
+      if (x === -roomKey && !(z <= 4 && z >= 0)) break;
+      if (x === -roomKey && !(z <= 4 && z >= 0)) break;
       const clonedMaterial = cubeMaterial.clone();
       const borderCube = new THREE.Mesh(cubeGeometry, clonedMaterial);
       borderCube.position.set(x + 0.5, -3.5, z);
       borderCube.translateX(79);
+      borderCube.material.map = textureLoader.load(
+        "./assets/textures/360_F_362952640_nPNPT14Jf1VtZLuJBT7snEK2OBgrmwhQ.jpg"
+      );
       borderCube.material.map = textureLoader.load(
         "./assets/textures/360_F_362952640_nPNPT14Jf1VtZLuJBT7snEK2OBgrmwhQ.jpg"
       );
@@ -608,6 +625,9 @@ let planA2 = new THREE.Mesh(planeGeometry, planeMaterial2);
 tex = textureLoader.load(
   "./assets/textures/c3621bb4707f392070dc03a64ef5086c.jpg"
 );
+tex = textureLoader.load(
+  "./assets/textures/c3621bb4707f392070dc03a64ef5086c.jpg"
+);
 planA2.material.map = tex;
 planA2.receiveShadow = true;
 planA2.material.map.wrapS = THREE.RepeatWrapping;
@@ -615,8 +635,10 @@ planA2.material.map.wrapT = THREE.RepeatWrapping;
 planA2.material.map.minFilter = THREE.LinearFilter;
 planA2.material.map.magFilter = THREE.NearestFilter;
 planA2.material.map.repeat.set(15, 15);
+planA2.material.map.repeat.set(15, 15);
 planA2.position.set(-53.1, 4.5, 0);
 scene.add(planA2);
+tex = textureLoader.load("./assets/textures/11746.jpg");
 tex = textureLoader.load("./assets/textures/11746.jpg");
 for (let x = -tiles; x <= tiles; x += 1) {
   for (let z = -tiles; z <= tiles; z += 1) {
@@ -641,33 +663,49 @@ for (let x = -tiles; x <= tiles; x += 1) {
 }
 
 //Chave Vermelha
+let planKeyVMaterial = new THREE.MeshLambertMaterial();
+let planKeyV = new THREE.Mesh(planeGeometryK, planKeyVMaterial);
+planKeyV.material.map = textureLoader.load(
+  "./assets/textures/c3621bb4707f392070dc03a64ef5086c.jpg"
+);
+planKeyV.receiveShadow = true;
+planKeyV.material.map.wrapS = THREE.RepeatWrapping;
+planKeyV.material.map.wrapT = THREE.RepeatWrapping;
+planKeyV.material.map.minFilter = THREE.LinearFilter;
+planKeyV.material.map.magFilter = THREE.NearestFilter;
+planKeyV.material.map.repeat.set(2.5, 2.5);
+planKeyV.position.set(-79.5, 4.5, 0);
+scene.add(planKeyV);
+
 for (let x = -roomKey; x <= roomKey; x += 1) {
   for (let z = -roomKey; z <= roomKey; z += 1) {
-    let floorCube = new THREE.Mesh(floorCubeGeometry, materialFloorCube);
-    let auxFloorCube = new THREE.Mesh(
-      auxFloorCubeGeometry,
-      materialAuxFloorCube
-    );
-
-    floorCube.position.set(x, 4, z);
-    floorCube.translateX(-79.5);
-
-    floorCube.receiveShadow = true;
-
-    auxFloorCube.receiveShadow = true;
-
-    scene.add(floorCube);
-
-    floorCube.add(auxFloorCube);
-    auxFloorCube.translateY(0.01);
+    if (Math.abs(z) === roomKey || Math.abs(x) === roomKey) {
+      if (x === roomKey) break;
+      const clonedMaterial = cubeMaterial.clone();
+      const borderCube = new THREE.Mesh(cubeGeometry, clonedMaterial);
+      borderCube.position.set(x + 0.5, 5.5, z + 1);
+      borderCube.translateX(-79.5);
+      borderCube.material.map = textureLoader.load(
+        "./assets/textures/11746.jpg"
+      );
+      borderCube.castShadow = true;
+      borderCube.receiveShadow = true;
+      const borderCubeBB = new THREE.Box3().setFromObject(borderCube);
+      collidableMeshList.push(borderCubeBB);
+      scene.add(borderCube);
+    }
   }
 }
+
 //porta para a chave
 var doorGeometry = new THREE.BoxGeometry(1, 1, 1);
 let materialDoor = new THREE.MeshLambertMaterial();
 let doorA2 = new THREE.Mesh(doorGeometry, materialDoor);
 doorA2.scale.set(1, 3, 10);
 doorA2.position.set(-75, 6, 1);
+doorA2.material.map = textureLoader.load(
+  "./assets/textures/WoodFine0090_1_download600.jpg"
+);
 doorA2.material.map = textureLoader.load(
   "./assets/textures/WoodFine0090_1_download600.jpg"
 );
@@ -691,22 +729,11 @@ for (let z = -6; z < 5; z += 5) {
   scene.add(cubeSecondArea);
 }
 
-const floatingCubesThirdArea = [];
-// adiciona cubos flutuantes da terceira area
-for (let x = -6; x < 5; x += 5) {
-  let cubeThirdArea = new THREE.Mesh(
-    cubeSecondAndThirdAreaGeometry,
-    materialCubeSecondArea
-  );
-  cubeThirdArea.position.set(x, -3.6, 63);
-  floatingCubesThirdArea.push(cubeThirdArea);
-  scene.add(cubeThirdArea);
-}
-
 //Cria terceira area
 let planeMaterial3 = new THREE.MeshLambertMaterial();
 
 let planA3 = new THREE.Mesh(planeGeometry, planeMaterial3);
+tex = textureLoader.load("./assets/textures/designer-floor-tiles-500x500.jpg");
 tex = textureLoader.load("./assets/textures/designer-floor-tiles-500x500.jpg");
 planA3.material.map = tex;
 planA3.receiveShadow = true;
@@ -714,6 +741,7 @@ planA3.material.map.wrapS = THREE.RepeatWrapping;
 planA3.material.map.wrapT = THREE.RepeatWrapping;
 planA3.material.map.minFilter = THREE.LinearFilter;
 planA3.material.map.magFilter = THREE.NearestFilter;
+planA3.material.map.repeat.set(15, 15);
 planA3.material.map.repeat.set(15, 15);
 planA3.position.set(0, -4.6, 50);
 scene.add(planA3);
@@ -741,9 +769,12 @@ for (let x = -tiles; x <= tiles; x += 1) {
 let materialDoorA3 = setDefaultMaterial("yellow");
 let doorA3 = new THREE.Mesh(doorGeometry, materialDoorA3);
 doorA3.scale.set(1, 3, 10);
-doorA3.position.set(0, -3, 71);
+doorA3.position.set(0, -3, 72);
 doorA3.rotateY(Math.PI / 2);
 let doorA3bb = new THREE.Box3().setFromObject(doorA3);
+doorA3.material.map = textureLoader.load(
+  "./assets/textures/WoodFine0090_1_download600.jpg"
+);
 doorA3.material.map = textureLoader.load(
   "./assets/textures/WoodFine0090_1_download600.jpg"
 );
@@ -805,26 +836,51 @@ while (numInterruptor < 8) {
 
 insertCubesThirdArea(cubeMaterial, collidableCubes, scene, interruptors);
 
+const floatingCubesThirdArea = [];
+// adiciona cubos flutuantes da terceira area
+positionCubesThirdArea.slice(4, 6).forEach(([x, _, z]) => {
+  let cubeThirdArea = new THREE.Mesh(
+    cubeSecondAndThirdAreaGeometry,
+    materialCubeSecondArea
+  );
+
+  cubeThirdArea.position.set(x, -3.6, z);
+  floatingCubesThirdArea.push(cubeThirdArea);
+  scene.add(cubeThirdArea);
+});
+
 //Chave Amarela
+let planKeyAmMaterial = new THREE.MeshLambertMaterial();
+let planKeyAm = new THREE.Mesh(planeGeometryK, planKeyAmMaterial);
+planKeyAm.material.map = textureLoader.load(
+  "./assets/textures/designer-floor-tiles-500x500.jpg"
+);
+planKeyAm.receiveShadow = true;
+planKeyAm.material.map.wrapS = THREE.RepeatWrapping;
+planKeyAm.material.map.wrapT = THREE.RepeatWrapping;
+planKeyAm.material.map.minFilter = THREE.LinearFilter;
+planKeyAm.material.map.magFilter = THREE.NearestFilter;
+planKeyAm.material.map.repeat.set(2.5, 2.5);
+planKeyAm.position.set(0, -4.6, 77);
+scene.add(planKeyAm);
+
 for (let x = -roomKey; x <= roomKey; x += 1) {
   for (let z = -roomKey; z <= roomKey; z += 1) {
-    let floorCube = new THREE.Mesh(floorCubeGeometry, materialFloorCube);
-    let auxFloorCube = new THREE.Mesh(
-      auxFloorCubeGeometry,
-      materialAuxFloorCube
-    );
-
-    floorCube.position.set(x, -5.0, z);
-    floorCube.translateZ(77);
-
-    floorCube.receiveShadow = true;
-
-    auxFloorCube.receiveShadow = true;
-
-    scene.add(floorCube);
-
-    floorCube.add(auxFloorCube);
-    auxFloorCube.translateY(0.01);
+    if (Math.abs(z) === roomKey || Math.abs(x) === roomKey) {
+      if (z == -roomKey) continue;
+      const clonedMaterial = cubeMaterial.clone();
+      const borderCube = new THREE.Mesh(cubeGeometry, clonedMaterial);
+      borderCube.position.set(x, -3.5, z);
+      borderCube.translateZ(77);
+      borderCube.material.map = textureLoader.load(
+        "./assets/textures/istockphoto-619525286-612x612.jpg"
+      );
+      borderCube.castShadow = true;
+      borderCube.receiveShadow = true;
+      const borderCubeBB = new THREE.Box3().setFromObject(borderCube);
+      collidableMeshList.push(borderCubeBB);
+      scene.add(borderCube);
+    }
   }
 }
 
@@ -868,9 +924,11 @@ for (let x = -finalArea; x <= finalArea; x += 1) {
 //Cria a plataforma sobre a area final
 
 var platformGeometry = new THREE.BoxGeometry(10, 0.2, 10);
-let materialPlatform = setDefaultMaterial("#DEB887");
-
+let materialPlatform = setDefaultMaterial("#ffff");
 let platform = new THREE.Mesh(platformGeometry, materialPlatform);
+platform.material.map = textureLoader.load(
+  "./assets/textures/Logo_da_UFJF.png"
+);
 
 platform.position.set(0, 4.5, 0);
 platform.translateZ(-44);
@@ -1019,7 +1077,7 @@ allAudios.load("./assets/sounds/trilha.mp3", function (buffer) {
   backgroundSound.setBuffer(buffer);
   backgroundSound.setLoop(true);
   backgroundSound.setVolume(0.2);
-  //backgroundSound.play();
+  backgroundSound.play();
 });
 
 const keySound = new THREE.Audio(music);
@@ -1050,6 +1108,12 @@ allAudios.load("./assets/sounds/porta.wav", function (buffer) {
   doorSound.setVolume(1);
 });
 
+const winSound = new THREE.Audio(music);
+allAudios.load("./assets/sounds/win.wav", function (buffer) {
+  winSound.setBuffer(buffer);
+  winSound.setLoop(false);
+  winSound.setVolume(1);
+});
 // rotaciona o personagem
 function rotate() {
   if (new_direction != direction) {
@@ -1178,8 +1242,8 @@ function checkMovement(axis, distance) {
   }
 }
 
-const diagonalDistance = 0.3; //Trocar para 0.02
-const normalDistance = 0.3; //Trocar para 0.12
+const diagonalDistance = 0.08;
+const normalDistance = 0.12;
 
 function keyboardUpdate() {
   keyboard.update();
@@ -1397,6 +1461,23 @@ function checkObjectClicked(event) {
   }
 }
 
+var musicaPorta2 = false;
+var musicaPorta3 = false;
+
+function tocaMusicaPorta2() {
+  if (musicaPorta2 == false) {
+    doorSound.play();
+    musicaPorta2 = true;
+  }
+}
+
+function tocaMusicaPorta3() {
+  if (musicaPorta3 == false) {
+    doorSound.play();
+    musicaPorta3 = true;
+  }
+}
+
 function lerps() {
   if (slerpConfig.move) {
     slerpConfig.object.quaternion.slerp(
@@ -1426,6 +1507,7 @@ function lerps() {
   }
   if (floatingCube.length <= 0) {
     collidableCubes.delete(doorA2);
+    tocaMusicaPorta2();
     doorA2.position.lerp(
       new THREE.Vector3(
         doorA2.position.x,
@@ -1439,6 +1521,7 @@ function lerps() {
     thirdAreaCompleted = true;
     dirLight.intensity = 1;
     collidableCubes.delete(doorA3);
+    tocaMusicaPorta3();
     doorA3.position.lerp(
       new THREE.Vector3(
         doorA3.position.x,
@@ -1462,6 +1545,7 @@ function render() {
   lerps();
 
   if (manBB && finalPlatformBB && manBB.intersectsBox(finalPlatformBB)) {
+    winSound.play();
     // mensagem de alerta para fim do jogo
     alert("Fim de jogo!\n\n Parabéns, você conseguiu!");
 
